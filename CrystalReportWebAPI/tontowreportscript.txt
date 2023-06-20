@@ -1,0 +1,36 @@
+
+
+create proc [dbo].[GetOperationInformationSheet]
+@TonTowRptId BIGINT 
+
+as
+
+SELECT     PR.TonTowRptId,  PRG.AccidentDate, PRG.AccidentTime, PRG.ReportingOfficer, PRG.Location, PRG.City, PRG.State, PRG.Zip,   PROO.OperatorLastName, PROO.OperatorFirstName, PROO.OperatorMiddleName, 
+                  PROO.OperatorSuffixName, PROO.OperatorVeh, PROO.OperatorInjured, PROO.OperatorFatality, PROO.OperatorNumber, PROO.OperatorStreet, PROO.OperatorStreetSuffix, PROO.OperatorStreetApt, PROO.OperatorCity, PROO.OperatorState, PROO.OperatorZip, PROO.OperatorDOB, 
+                  PROO.OperatorHomePhone, PROO.OperatorWorkPhone, PROO.OperatorLic, PROO.OperatorStateNumber, PROO.OperatorInsuranceComp, PROO.OperatorPolicyNumber, PROO.OwnerLastName, PROO.OwnerFirstName, PROO.OwnerMiddleName, PROO.OwnerSuffixName, 
+                  PROO.OwnerHomePhone, PROO.OwnerWorkPhone, PROO.OwnerNumber, PROO.OwnerStreet, PROO.OwnerStreetSuffix, PROO.OwnerStreetApt, PROO.OwnerCity, PROO.OwnerState, PROO.OwnerZip, PROO.OwnerInsuranceComp, PROO.OwnerPolicyNumber, PROO.VehYear, PROO.VehMake, 
+                  PROO.VehModel, PROO.VehVin, PROO.VehReg, PROO.VehStateNumber, PROO.VehTowedBy, PROO.VehTowedTo
+FROM        dbo.PoliceReport AS PR INNER JOIN
+                  dbo.PoliceReportGeneral AS PRG ON PR.TonTowRptId = PRG.TonTowRptId LEFT OUTER JOIN
+                  dbo.PoliceReportOperatorOwnerVehicleDtls AS PROO ON PR.TonTowRptId = PROO.TonTowRptId
+WHERE     (PR.TonTowRptId = @TonTowRptId)
+
+
+
+go
+
+create proc [dbo].[GetPoliceReport]  --16
+@TonTowRptId bigint
+as
+ 
+SELECT     PR.TonTowRptId, PR.JobNum, CONVERT(DATETIME, PR.DateOfCrash) AS DateOfCrash, CONVERT(DATETIME, PR.TimeOfCrash) AS TimeOfCrash, PR.CityTown, PR.VehicleNumber, PR.InjuredNumber, PR.SpeedLimit, PR.Latitude, PR.Longitude, PR.Other, PR.AtIntersection, PR.AIRoute1, 
+                  PR.AIDirection1, PR.AIRoadwayStName1, PR.AIRoute2, PR.AIDirection2, PR.AIRoadwayStName2, PR.AIRoute3, PR.NAIRoadwayStName, PR.AIRoadwayStName3, PR.NAIRoute1, PR.NAIDirection1, PR.NAIFeet1, PR.NAIMile, PR.NAIExitNo, PR.NAIFeet2, PR.NAIRoute, PR.NAIRoadwaySt, 
+                  PR.NAIFeet3, PR.NAILandmark, PR.CrashReportId, PR.CrashNarrative, PR.Status, PR.CreatedBy, PR.CreatedDate, PR.ModifiedBy, PR.ModifiedDate, PRVD.TonTowRptId AS Expr2, PRVD.VehicleNo, PRVD.CrashType, PRVD.Type, PRVD.Action, PRVD.Location, PRVD.Condition, 
+                  PRVD.Occupants, PRVD.License, PRVD.Street, PRVD.DOBAge, PRVD.Sex, PRVD.LicClass, PRVD.LicRestrictions, PRVD.CDLEndorsement, PRVD.OperatorLastName, PRVD.OperatorFirstName, PRVD.OperatorMiddleName, PRVD.OperatorAddress, PRVD.OperatorCity, PRVD.OperatorState, 
+                  PRVD.OperatorZip, PRVD.InsuranceCompany, PRVD.VehicleTravelDirection, PRVD.Viol1, PRVD.Viol2, PRVD.Viol3, PRVD.Viol4, PRVD.Reg, PRVD.RegType, PRVD.RegState, PRVD.VehicleYear, PRVD.VehicleMake, PRVD.VehicleConfig, PRVD.OwnerLastName, PRVD.OwnerFirstName, 
+                  PRVD.OwnerMiddleName, PRVD.OwnerAddress, PRVD.OwnerCity, PRVD.OwnerState, PR.AIDirection3, PR.NAIDirection, PR.NAIAddress, PR.NAIDirection2, PR.NAIDirection3, PRVD.RespondingToEmergency, PRVD.CitationIssued, PRVD.OwnerZip, PRVD.VehicleActionPriortoCrash, 
+                  PRVD.MostHarmfulEvent, PRVD.DriverDistractedBy, PRVD.TestStatus, PRVD.TypeofTest, PRVD.BacTestResult, PRVD.SuspectedAlcohol, PRVD.SuspectedDrug, PRVD.TowedFromScene, PR.LocalPolice, PR.StatePolice, PR.MBTAPolice, PR.CampusPolice, PRVD.EventSequence1, 
+                  PRVD.EventSequence2, PRVD.EventSequence3, PRVD.EventSequence4, PRVD.DriverContributingCode1, PRVD.DriverContributingCode2, PRVD.DamagedAreaCode3, PRVD.DamagedAreaCode2, PRVD.DamagedAreaCode1
+FROM        dbo.PoliceReport AS PR LEFT OUTER JOIN
+                  dbo.PoliceReportVehicleDtls AS PRVD ON PR.TonTowRptId = PRVD.TonTowRptId
+WHERE PR.TonTowRptId=@TonTowRptId
